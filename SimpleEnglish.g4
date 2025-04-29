@@ -81,7 +81,7 @@ inputStatement
     ;
 
 outputStatement
-    : 'Say' (STRING | STRING 'plus' ID) '.'
+    : 'Say' (STRING | STRING 'plus' ID | ID) '.'
     ;
 
 ID      : [a-zA-Z_][a-zA-Z_0-9]* ;
