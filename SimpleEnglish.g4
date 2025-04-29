@@ -1,89 +1,91 @@
 grammar SimpleEnglish;
 
-// Parser Rules
-
-program: statement+ EOF;
+program: statement+;
 
 statement
     : variableDeclaration
-    | arithmeticOperation
-    | logicalOperation
-    | conditionalStatement
-    | loopStatement
-    | functionDefinition
+    | expressionStatement
+    | conditional
+    | loop
+    | functionDeclaration
     | functionCall
-    | userInput
+    | inputStatement
     | outputStatement
     ;
 
 variableDeclaration
-    : 'Make' ID valueExpression '.'
+    : 'Make' ID value '.'
     ;
 
-valueExpression
-    : INT
+value
+    : NUMBER
     | STRING
     | ID
     | arithmeticExpression
     ;
 
-arithmeticOperation
+arithmeticExpression
+    : NUMBER arithmeticOp NUMBER
+    ;
+
+arithmeticOp
+    : 'plus'
+    | 'minus'
+    | 'times'
+    | 'divided by'
+    | 'mod'
+    ;
+
+expressionStatement
     : 'Make' ID arithmeticExpression '.'
     ;
 
-arithmeticExpression
-    : valueExpression ('plus' | 'minus' | 'times' | 'divided by' | 'mod') valueExpression
+conditional
+    : 'If' condition ',' 'say' STRING '.' ('Otherwise' ',' 'say' STRING '.')?
     ;
 
-logicalOperation
-    : 'If' comparisonExpression ',' outputStatement
+condition
+    : ID comparator value
     ;
 
-comparisonExpression
-    : ID comparisonOperator valueExpression
-    ;
-
-comparisonOperator
+comparator
     : 'is equal to'
-    | 'is greater than'
-    | 'is less than'
     | 'is greater than or equal to'
     | 'is less than or equal to'
+    | 'is greater than'
+    | 'is less than'
     ;
 
-conditionalStatement
-    : 'If' comparisonExpression ',' outputStatement ',' 'Otherwise,' outputStatement
+loop
+    : 'Repeat' NUMBER 'times' ',' statement+
     ;
 
-loopStatement
-    : 'Repeat' INT 'times,' statement
+functionDeclaration
+    : 'To' ID (',' 'take' paramList)? ',' 'return' returnExpression '.'
     ;
 
-functionDefinition
-    : 'To' ID 'take' ID 'and' ID ',' functionBody
+paramList
+    : ID ('and' ID)?
     ;
 
-functionBody
-    : statement+ 'return' arithmeticExpression '.'
+returnExpression
+    : ID arithmeticOp ID
     ;
 
 functionCall
-    : 'Make' ID ID valueExpression 'and' valueExpression '.'
-    | 'Say' ID '.'
+    : 'Make' ID ID value ('and' value)? '.'
     ;
 
-userInput
+inputStatement
     : 'Ask' STRING ',' 'make' ID 'the answer.'
     ;
 
 outputStatement
-    : 'Say' (STRING | (STRING 'plus' ID)) '.'
+    : 'Say' (STRING | STRING 'plus' ID) '.'
     ;
 
-// Lexer Rules
+ID      : [a-zA-Z_][a-zA-Z_0-9]* ;
+NUMBER  : [0-9]+ ;
+STRING  : '"' .*? '"' ;
 
-ID: [a-zA-Z_][a-zA-Z_0-9]*;
-INT: [0-9]+;
-STRING: '"' (~["\r\n])* '"';
-
-WS: [ \t\r\n]+ -> skip;
+WS      : [ \t\r\n]+ -> skip ;
