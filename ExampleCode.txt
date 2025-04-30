@@ -1,0 +1,10 @@
+Make x 5.
+Make y 10.
+Make sum x plus y.
+If sum is greater than 10, say "Large sum". Otherwise, say "Small sum".
+Repeat 3 times, Say "Looping.".
+To add, take a and b, return a plus b.
+Make result add 3 and 4.
+Say "The result is " plus result.
+Ask "What is your name?", make name the answer.
+Say name.
